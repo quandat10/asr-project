@@ -1,5 +1,5 @@
 ---
-version: '3.8'
+version: '2'
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
@@ -59,35 +59,7 @@ services:
       - common  
     environment:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'zookeeper:2181'  
-
-  api-gateway:
-    image: quandat10/asr-api-gateway
-    ports:
-      - 3000:3000
-    depends_on:
-      - upload-service  
-    networks:
-      - common
-  upload-service:
-    image: quandat10/asr-upload-service
-    ports:
-      - 9999:9999
-    hostname: upload-service
-    depends_on:
-      - broker
-    networks:
-      - common
-    restart: always  
-  stream-service:
-    image: quandat10/asr-stream-service
-    ports:
-      - 8000:8000
-    depends_on:
-      - broker
-    networks:
-      - common   
-    restart: always  
-networks:
-    common:      
-      driver: bridge
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'zookeeper:2181'
+networks: 
+  common:
+    driver: bridge      
