@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from schema import Message
-from config import loop, KAFKA_BOOTSTRAP_SERVERS, KAFKA_CONSUMER_GROUP, KAFKA_TOPIC
+from config import loop, KAFKA_BOOTSTRAP_SERVERS, KAFKA_CONSUMER_GROUP, KAFKA_TOPIC, KAFKA_TOPIC_RESULT
 from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
 import json
 from pykafka import KafkaClient
@@ -35,17 +35,16 @@ model = Wav2Vec2ForCTC.from_pretrained(
     vocab_size=len(processor.tokenizer)
 ).to('cpu')
 
-@route.post('/create_message')
 async def send(message: Message):
     producer = AIOKafkaProducer(
         loop=loop, bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS)
     await producer.start()
     try:
         print(f'Sendding message with value: {message}')
-        value_json = json.dumps(message.__dict__).encode('utf-8')
-        await producer.send_and_wait(topic=KAFKA_TOPIC, value=value_json)
+        await producer.send_and_wait(topic=KAFKA_TOPIC_RESULT, value=message)
     finally:
         await producer.stop()
+
 @route.get('/hello')
 async def hello():
     audio_waveform, sample_rate = torchaudio.load('./audio.wav')
@@ -70,6 +69,7 @@ async def hello():
 
         output = processor.batch_decode(pred_ids, output_word_offsets=False, output_char_offsets=False)
         print(output)
+
     return {"message": output}
 
 async def consume():
@@ -92,6 +92,8 @@ async def consume():
                 # pred_scores = scores.gather(1, pred_ids.unsqueeze(-1))[:, :, 0]
 
                 output = processor.batch_decode(pred_ids, output_word_offsets=False, output_char_offsets=False)
+
                 print(output)
+                await send(output[0].encode())
     finally:
         await consumer.stop()

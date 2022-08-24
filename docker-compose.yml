@@ -60,6 +60,34 @@ services:
     environment:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'zookeeper:2181'
+  # api-gateway:
+  #   image: quandat10/asr-api-gateway
+  #   depends_on:
+  #     - upload-service
+  #   ports:
+  #     - "3000:3000"
+  #   networks: 
+  #     - common     
+  # upload-service:
+  #   image: quandat10/asr-upload-service
+  #   depends_on:
+  #     - broker
+  #     - zookeeper
+  #   ports:
+  #     - "9999:9999"
+  #   restart: always  
+  #   networks: 
+  #     - common
+  # stream-service:
+  #   image: quandat10/asr-stream-service
+  #   depends_on:
+  #     - api-gateway
+  #     - broker
+  #     - zookeeper
+  #   ports:
+  #     - "8000:8000"
+  #   networks: 
+  #     - common     
 networks: 
   common:
     driver: bridge      

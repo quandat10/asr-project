@@ -68,8 +68,11 @@ export class ProducerService implements OnModuleInit, OnApplicationShutdown {
   }
 
   async kafkaStreamsProduce(dataStreams: Buffer) {
+
     const data = this.kafkaStreams.getKStream(null)
     data.to(this.configService.get("TOPIC"))
+
+
     // while (dataStreams.length > 0) {
     //   setTimeout(()=>arrayStreams.push(dataStreams.slice(0, 30000)),3000)
     // }
@@ -79,7 +82,6 @@ export class ProducerService implements OnModuleInit, OnApplicationShutdown {
     data.start().then(
       () => {
         const length = parseInt((dataStreams.length / (size)).toString(), 10)
-        console.log(length)
 
         for (let i = 0; i <= length; i++) {
           if (size * (i + 1) > dataStreams.length) {

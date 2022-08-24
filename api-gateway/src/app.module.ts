@@ -22,7 +22,7 @@ import { AppService } from './app.service';
         name: 'SERVICE_MAIN',
         transport: Transport.TCP,
         options: {
-          host: 'upload-service',
+          host: 'localhost',
           port: 9998,
         },
       },
