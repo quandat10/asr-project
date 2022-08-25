@@ -23,7 +23,7 @@ in the root folder
 cd api-gateway
 ```
 ```
-yarn
+npm install
 ```
 ```
 yarn start:dev
