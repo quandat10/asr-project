@@ -56,7 +56,7 @@ Install all packages
 ```
 python -m pip install -r  requirements.txt
 ```
-Run server flask
+Run server fast api
 ```
 python -m uvicorn main:app --reload
 ```
