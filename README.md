@@ -1,6 +1,6 @@
 # Build API Gateway and kafka stream system in S2T ML
 
-Use **VS Code**.
+Use **VS Code**
 
 **Requirements:**
 
